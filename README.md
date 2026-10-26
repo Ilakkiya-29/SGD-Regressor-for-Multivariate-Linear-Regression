@@ -48,6 +48,7 @@ print("SGDRegressor MSE:", mean_squared_error(y_test, sgd_pred))
 
 ## Output:
 LinearRegression MSE: 0.6589108649336336
+
 SGDRegressor MSE: 0.6889231562327132
 
 ## Result:
