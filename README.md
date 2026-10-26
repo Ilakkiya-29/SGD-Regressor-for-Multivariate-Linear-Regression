@@ -24,39 +24,31 @@ Program to implement the multivariate linear regression model for predicting the
 Developed by: Ilakkiya K
 RegisterNumber: 212225040130
 */
-from sklearn.linear_model import SGDRegressor
+from sklearn.linear_model import LinearRegression, SGDRegressor
+from sklearn.metrics import mean_squared_error
 import numpy as np
-import matplotlib.pyplot as plt
-
-# Sample data (2 features)
-X = np.array([[1,2],[2,1],[3,4],[4,3],[5,5]])
-y = np.array([5,6,9,10,13])
-
-# Create model
-model = SGDRegressor(max_iter=1000, eta0=0.01, learning_rate='constant')
-
-# Train model
-model.fit(X, y)
-
-# Check learned weights
-print("Weights:", model.coef_)
-print("Bias:", model.intercept_)
-
-# Predict
-y_pred = model.predict(X)
-
-# Plot Actual vs Predicted
-plt.scatter(y, y_pred)
-plt.xlabel("Actual y")
-plt.ylabel("Predicted y")
-plt.title("Actual vs Predicted (SGDRegressor)")
-plt.plot([y.min(), y.max()], [y.min(), y.max()], 'r--')  # Perfect prediction line
-plt.show()
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+data = fetch_california_housing()
+X, y = data.data[:, :3], data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+lr = LinearRegression()
+lr.fit(X_train, y_train)
+lr_pred = lr.predict(X_test)
+sgd = SGDRegressor(max_iter=1000, tol=1e-3, eta0=0.01, learning_rate='constant', random_state=42)
+sgd.fit(X_train, y_train)
+sgd_pred = sgd.predict(X_test)
+print("LinearRegression MSE:", mean_squared_error(y_test, lr_pred))
+print("SGDRegressor MSE:", mean_squared_error(y_test, sgd_pred))
 ```
 
 ## Output:
-<img width="740" height="574" alt="image" src="https://github.com/user-attachments/assets/ad355d2a-8a3d-4ec7-a7bc-f75530d0499a" />
-
+LinearRegression MSE: 0.6589108649336336
+SGDRegressor MSE: 0.6889231562327132
 
 ## Result:
 Thus the program to implement the multivariate linear regression model for predicting the price of the house and number of occupants in the house with SGD regressor is written and verified using python programming.
